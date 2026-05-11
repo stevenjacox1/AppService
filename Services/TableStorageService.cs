@@ -42,7 +42,7 @@ namespace AppService.Services
                 var result = await _tableClient.GetEntityAsync<Item>(partitionKey, rowKey);
                 return result.Value;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 _logger.LogWarning($"Item not found: {partitionKey} - {rowKey}");
                 return null;

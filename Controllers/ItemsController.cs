@@ -20,9 +20,9 @@ namespace AppService.Controllers
         /// <summary>
         /// Create a new item
         /// </summary>
+        /// <response code="201">Item created successfully</response>
+        /// <response code="400">Invalid request</response>
         [HttpPost]
-        [ProduceResponseType(StatusCodes.Status201Created)]
-        [ProduceResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Item>> CreateItem([FromBody] CreateItemRequest request)
         {
             if (!ModelState.IsValid)
@@ -37,8 +37,8 @@ namespace AppService.Controllers
         /// <summary>
         /// Get all items
         /// </summary>
+        /// <response code="200">Returns all items</response>
         [HttpGet]
-        [ProduceResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<Item>>> GetAllItems()
         {
             var items = await _tableStorageService.GetAllItemsAsync();
@@ -48,8 +48,9 @@ namespace AppService.Controllers
         /// <summary>
         /// Get items by partition key
         /// </summary>
+        /// <param name="partitionKey">The partition key to filter by</param>
+        /// <response code="200">Returns items for the partition</response>
         [HttpGet("partition/{partitionKey}")]
-        [ProduceResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<Item>>> GetItemsByPartition(string partitionKey)
         {
             var items = await _tableStorageService.GetItemsByPartitionKeyAsync(partitionKey);
@@ -59,9 +60,11 @@ namespace AppService.Controllers
         /// <summary>
         /// Get a specific item by partition key and row key
         /// </summary>
+        /// <param name="partitionKey">The partition key</param>
+        /// <param name="rowKey">The row key</param>
+        /// <response code="200">Item found</response>
+        /// <response code="404">Item not found</response>
         [HttpGet("{partitionKey}/{rowKey}")]
-        [ProduceResponseType(StatusCodes.Status200OK)]
-        [ProduceResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Item>> GetItem(string partitionKey, string rowKey)
         {
             var item = await _tableStorageService.GetItemAsync(partitionKey, rowKey);
@@ -76,10 +79,13 @@ namespace AppService.Controllers
         /// <summary>
         /// Update an existing item
         /// </summary>
+        /// <param name="partitionKey">The partition key</param>
+        /// <param name="rowKey">The row key</param>
+        /// <param name="request">The updated item data</param>
+        /// <response code="200">Item updated successfully</response>
+        /// <response code="404">Item not found</response>
+        /// <response code="400">Invalid request</response>
         [HttpPut("{partitionKey}/{rowKey}")]
-        [ProduceResponseType(StatusCodes.Status200OK)]
-        [ProduceResponseType(StatusCodes.Status404NotFound)]
-        [ProduceResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Item>> UpdateItem(string partitionKey, string rowKey, [FromBody] UpdateItemRequest request)
         {
             if (!ModelState.IsValid)
@@ -101,9 +107,11 @@ namespace AppService.Controllers
         /// <summary>
         /// Delete an item
         /// </summary>
+        /// <param name="partitionKey">The partition key</param>
+        /// <param name="rowKey">The row key</param>
+        /// <response code="204">Item deleted successfully</response>
+        /// <response code="404">Item not found</response>
         [HttpDelete("{partitionKey}/{rowKey}")]
-        [ProduceResponseType(StatusCodes.Status204NoContent)]
-        [ProduceResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteItem(string partitionKey, string rowKey)
         {
             try
@@ -121,8 +129,8 @@ namespace AppService.Controllers
         /// <summary>
         /// Health check endpoint
         /// </summary>
+        /// <response code="200">Service is healthy</response>
         [HttpGet("health")]
-        [ProduceResponseType(StatusCodes.Status200OK)]
         public IActionResult Health()
         {
             return Ok(new { status = "healthy", timestamp = DateTime.UtcNow });

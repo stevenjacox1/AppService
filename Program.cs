@@ -1,7 +1,8 @@
 using Azure.Data.Tables;
 using Azure.Identity;
+using AppService.Services;
 
-var builder = WebApplicationBuilder.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddControllers();
@@ -19,22 +20,15 @@ builder.Services.AddCors(options =>
 });
 
 // Register Table Storage client
-var tableStorageConnectionString = builder.Configuration.GetConnectionString("TableStorageConnection");
-if (!string.IsNullOrEmpty(tableStorageConnectionString))
+var tableStorageUri = builder.Configuration["TableStorageUri"];
+if (string.IsNullOrEmpty(tableStorageUri))
 {
-    // Use connection string for local development
-    builder.Services.AddSingleton(x => 
-        new TableClient(new Uri(builder.Configuration["TableStorageUri"]), "items", 
-            new DefaultAzureCredential()));
+    throw new InvalidOperationException("TableStorageUri is not configured");
 }
-else
-{
-    // Use DefaultAzureCredential for Azure deployment (Managed Identity)
-    var tableStorageUri = builder.Configuration["TableStorageUri"];
-    builder.Services.AddSingleton(x => 
-        new TableClient(new Uri(tableStorageUri), "items", 
-            new DefaultAzureCredential()));
-}
+
+builder.Services.AddSingleton(x => 
+    new TableClient(new Uri(tableStorageUri), "items", 
+        new DefaultAzureCredential()));
 
 // Register application services
 builder.Services.AddScoped<ITableStorageService, TableStorageService>();
