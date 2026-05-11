@@ -1,0 +1,14 @@
+bin/
+obj/
+dist/
+.vs/
+.vscode/
+*.log
+.git/
+.gitignore
+LocalDB
+TestResults/
+*.user
+.idea/
+Thumbs.db
+.DS_Store
