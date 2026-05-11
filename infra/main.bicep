@@ -60,7 +60,7 @@ resource appService 'Microsoft.Web/sites@2022-03-01' = {
 resource appServiceConfig 'Microsoft.Web/sites/config@2022-03-01' = {
   name: '${appService.name}/web'
   properties: {
-    linuxFxVersion: 'DOTNETCORE|8.0'
+    linuxFxVersion: 'DOTNETCORE|10.0'
     appSettings: [
       {
         name: 'ASPNETCORE_ENVIRONMENT'
