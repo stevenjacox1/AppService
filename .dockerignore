@@ -1,0 +1,12 @@
+**/.git
+**/.gitignore
+**/.vs
+**/.vscode
+**/bin
+**/obj
+**/dist
+**/node_modules
+**/.DS_Store
+**/*.user
+**/appsettings.*.json
+**/*Test*

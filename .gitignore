@@ -1,0 +1,39 @@
+# Build and obj directories
+bin/
+obj/
+dist/
+
+# IDE
+.vs/
+.vscode/
+*.swp
+*.swo
+*~
+*.user
+*.suo
+*.sln.docstates
+
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Dependencies
+node_modules/
+packages/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build output
+*.log
+
+# IDE settings
+.idea/
+*.iml
+
+# Test results
+TestResults/
