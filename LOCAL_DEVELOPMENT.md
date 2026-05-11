@@ -28,23 +28,41 @@ If you have Visual Studio with Azure Storage tools, it includes Azurite emulator
 
 ## Running the Application Locally
 
-### 1. Start Azurite
+### Quick Start (Recommended)
 
+Install dependencies once:
+```bash
+npm install
+```
+
+Then run both Azurite and the app with one command:
+```bash
+npm start
+# or
+npm run dev
+```
+
+This will start:
+- ✅ Azurite on `http://127.0.0.1:10002`
+- ✅ .NET app on `http://localhost:5000`
+
+Press `Ctrl+C` to stop both services.
+
+### Manual Setup (Alternative)
+
+If you prefer to manage services manually:
+
+**Terminal 1 - Start Azurite:**
 ```bash
 azurite --tables --loose --location ./data
 ```
 
-Azurite will start on `http://127.0.0.1:10002`
-
-### 2. Run the Application
-
-The application is configured for development in `appsettings.Development.json` which automatically uses the Azurite endpoint:
-
+**Terminal 2 - Start the App:**
 ```bash
 dotnet run
 ```
 
-### 3. Access the API
+### Access the API
 
 - API: http://localhost:5000 (HTTP) or https://localhost:5001 (HTTPS)
 - Swagger UI: http://localhost:5000/swagger or https://localhost:5001/swagger

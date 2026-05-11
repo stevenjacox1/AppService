@@ -3,8 +3,8 @@
 ## Local Development (5 minutes)
 
 ### 1. Prerequisites
-- .NET 8.0 SDK installed
-- Azure Storage Account or Azurite emulator
+- .NET 10.0 SDK installed
+- Node.js and npm (for Azurite and concurrently)
 - Visual Studio Code or Visual Studio
 
 ### 2. Setup
@@ -14,21 +14,25 @@
 git clone <repository-url>
 cd AppService
 
-# Restore packages
+# Install Node dependencies (includes Azurite and concurrently)
+npm install
+
+# Restore .NET packages
 dotnet restore
-
-# Update appsettings.json with your Table Storage connection
 ```
 
-### 3. Run Locally
+### 3. Run Locally (Easiest Way)
 
+One command starts both Azurite and the app:
 ```bash
-# Start the application
-dotnet run
-
-# Navigate to swagger UI
-# http://localhost:5000/swagger
+npm start
 ```
+
+This automatically starts:
+- ✅ Azurite (Table Storage emulator) on `http://127.0.0.1:10002`
+- ✅ .NET API on `http://localhost:5000`
+
+Navigate to: `http://localhost:5000/swagger` to see Swagger UI
 
 ### 4. Test the API
 

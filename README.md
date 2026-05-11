@@ -4,12 +4,14 @@ A complete template for deploying a REST API on Azure App Service with Azure Tab
 
 ## Architecture
 
-- **ASP.NET Core 8.0** - REST API framework
+- **ASP.NET Core 10.0** - REST API framework
 - **Azure App Service** - Hosting platform
 - **Azure Table Storage** - NoSQL database
 - **Azure Managed Identity** - Secure authentication
 - **Docker** - Containerization
 - **GitHub Actions** - CI/CD pipeline
+- **Azurite** - Local Table Storage emulator
+- **Concurrently** - Parallel process runner
 
 ## Project Structure
 
@@ -53,52 +55,65 @@ All endpoints are prefixed with `/api/items`
 
 ## Prerequisites
 
-- .NET 8.0 SDK
+- .NET 10.0 SDK
+- Node.js and npm (for Azurite and concurrently)
 - Azure CLI
 - Azure subscription
 - Docker (for containerization)
 - Git (for CI/CD)
 
-## Local Development
+## Quick Start - Local Development
 
-### 1. Clone the repository
+Run Azurite and the API together with one command:
+
+```bash
+# Install dependencies
+npm install
+dotnet restore
+
+# Start everything
+npm start
+```
+
+Then open: http://localhost:5000/swagger
+
+For detailed setup instructions, see [LOCAL_DEVELOPMENT.md](LOCAL_DEVELOPMENT.md)
+
+## Local Development (Detailed)
+
+### 1. Clone the repository and install dependencies
 
 ```bash
 git clone <repository-url>
 cd AppService
+npm install          # For Azurite and concurrently
+dotnet restore       # For .NET packages
 ```
 
-### 2. Configure local Table Storage
-
-Install Azure Storage Emulator or use Azure Table Storage connection string:
+### 2. Run with Azurite (Recommended)
 
 ```bash
-# Edit appsettings.json
-{
-  "TableStorageUri": "https://yourstorageaccount.table.core.windows.net",
-  "ConnectionStrings": {
-    "TableStorageConnection": "your-connection-string"
+npm start            # Starts both Azurite and the API
+```
+
+Or manually:
+```bash
+npm run azurite      # Terminal 1
+npm run dotnet       # Terminal 2
+```
+
+### 3. Access the API
+
+- Swagger UI: http://localhost:5000/swagger
+- Health Check: http://localhost:5000/api/items/health
+- API Base: http://localhost:5000/api/items
+
+For more details on local development, see [LOCAL_DEVELOPMENT.md](LOCAL_DEVELOPMENT.md) and [QUICKSTART.md](QUICKSTART.md)
   }
 }
 ```
 
-### 3. Restore dependencies
-
-```bash
-dotnet restore
-```
-
-### 4. Run the application
-
-```bash
-dotnet run
-```
-
-The API will be available at `https://localhost:5001` or `http://localhost:5000`
-
-### 5. Test the API
-
-Swagger UI is available at `https://localhost:5001/swagger`
+### 4. Alternative: Use Azure Storage Account
 
 ## Deployment to Azure
 

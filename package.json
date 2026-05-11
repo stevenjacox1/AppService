@@ -1,0 +1,23 @@
+{
+  "name": "appservice",
+  "version": "1.0.0",
+  "description": "Azure App Service REST API with Table Storage",
+  "scripts": {
+    "azurite": "azurite --tables --loose --location ./data",
+    "dotnet": "dotnet run",
+    "start": "concurrently \"npm run azurite\" \"npm run dotnet\" --names \"azurite,dotnet\" --prefix \"[{name}]\" --kill-others-on-exit",
+    "dev": "concurrently \"npm run azurite\" \"dotnet run\" --names \"azurite,dotnet\" --prefix \"[{name}]\" --kill-others-on-exit"
+  },
+  "keywords": [
+    "azure",
+    "app-service",
+    "rest-api",
+    "table-storage",
+    "dotnet"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
