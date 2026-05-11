@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Azure App Service REST API with Table Storage",
   "scripts": {
-    "azurite": "azurite --tables --loose --location ./data",
-    "dotnet": "dotnet run",
+    "azurite": "azurite --tableHost 127.0.0.1 --loose --location ./data",
+    "dotnet": "cross-env ASPNETCORE_ENVIRONMENT=Development dotnet run",
     "start": "concurrently \"npm run azurite\" \"npm run dotnet\" --names \"azurite,dotnet\" --prefix \"[{name}]\" --kill-others-on-exit",
-    "dev": "concurrently \"npm run azurite\" \"dotnet run\" --names \"azurite,dotnet\" --prefix \"[{name}]\" --kill-others-on-exit"
+    "dev": "npm run start"
   },
   "keywords": [
     "azure",
@@ -18,6 +18,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "concurrently": "^8.2.2"
   }
 }

@@ -20,24 +20,31 @@ builder.Services.AddCors(options =>
 });
 
 // Register Table Storage client
-var tableStorageUri = builder.Configuration["TableStorageUri"];
-if (string.IsNullOrEmpty(tableStorageUri))
+var tableStorageConnectionString = builder.Configuration.GetConnectionString("TableStorageConnection");
+if (!string.IsNullOrWhiteSpace(tableStorageConnectionString))
 {
-    throw new InvalidOperationException("TableStorageUri is not configured. Please configure it in appsettings.json or set the environment variable.");
+    builder.Services.AddSingleton(_ => new TableClient(tableStorageConnectionString, "items"));
 }
+else
+{
+    var tableStorageUri = builder.Configuration["TableStorageUri"];
+    if (string.IsNullOrWhiteSpace(tableStorageUri))
+    {
+        throw new InvalidOperationException("TableStorageConnection or TableStorageUri is not configured. Please configure appsettings.Development.json for Azurite or appsettings.Production.json for Azure.");
+    }
 
-try
-{
-    builder.Services.AddSingleton(x => 
-        new TableClient(new Uri(tableStorageUri), "items", 
-            new DefaultAzureCredential()));
-}
-catch (UriFormatException ex)
-{
-    throw new InvalidOperationException(
-        $"Invalid TableStorageUri format: '{tableStorageUri}'. " +
-        $"For local development, use 'http://127.0.0.1:10002' (requires Azurite). " +
-        $"For Azure, use 'https://yourstorageaccount.table.core.windows.net'.", ex);
+    try
+    {
+        builder.Services.AddSingleton(_ =>
+            new TableClient(new Uri(tableStorageUri), "items", new DefaultAzureCredential()));
+    }
+    catch (UriFormatException ex)
+    {
+        throw new InvalidOperationException(
+            $"Invalid TableStorageUri format: '{tableStorageUri}'. " +
+            $"For local development, use the Azurite connection string in appsettings.Development.json. " +
+            $"For Azure, use 'https://yourstorageaccount.table.core.windows.net'.", ex);
+    }
 }
 
 // Register application services
